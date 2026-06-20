@@ -1,0 +1,41 @@
+导出默认异步函数处理程序(req，res){
+res.setHeader('Access-Control-Allow-Origin'，'*')；
+res.setHeader('Access-Control-Allow-Methods'，'GET，POST，OPTIONS')；
+res.setHeader('Access-Control-Allow-Headers'，'*')；
+  
+if(req.method==='OPTIONS'){
+返回res.status(200).end()；
+  }
+
+//通用转发模式：？目标=URL
+常量{target}=req.query；
+if(目标){
+尝试{
+Const decoded=decodeURIComponent(目标)；
+常数响应=等待提取(已解码，{
+标题：{
+'User-Agent'：'Mozilla/5.0(Windows NT10.0；Win64；x64)AppleWebKit/537.36'，
+'Referer'：已解码，
+        },
+      });
+const buffer=Buffer.from(await response.arrayBuffer())；
+res.status(response.status)；
+res.setHeader('Content-Type'，response.Headers.get('content-type')||'application/octet-stream')；
+res.send(缓冲区)；
+返回；
+}渔获物(e){
+返回res.status(500).json({error:e.message})；
+    }
+  }
+
+// 默认返回服务信息
+res.status(200).json({
+状态：'跑步'，
+服务：'视频嗅探代理'，
+版本：'1.0.0'，
+终结点：{
+分析：'post/api/parse-body：{url，类型，关键字，...}'，
+proxy：'GET/？target=encoded_URL'，
+    },
+  });
+}
